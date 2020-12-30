@@ -1,4 +1,4 @@
-package com.example.submission3
+package com.example.submission3.repository
 
 
 import com.example.submission3.api.RetrofitInstance

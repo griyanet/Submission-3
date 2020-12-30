@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:menuCategory="container">
         <item
-            android:id="@+id/menu1"
+            android:id="@+id/navigation_alarm"
             android:icon="@drawable/ic_alarm"
             android:title="@string/menu_1"
             app:showAsAction="collapseActionView" />
         <item
-            android:id="@+id/menu2"
+            android:id="@+id/settingMenu"
             android:icon="@drawable/ic_settings"
             android:title="@string/menu_2" />
     </group>
     <item
-        android:id="@+id/search"
+        android:id="@+id/searchMenu"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         android:queryHint="Masukkan kata"

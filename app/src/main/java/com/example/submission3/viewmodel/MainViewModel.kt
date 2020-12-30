@@ -1,9 +1,10 @@
-package com.example.submission3
+package com.example.submission3.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.submission3.repository.Repository
 import com.example.submission3.model.FollowersItem
 import com.example.submission3.model.UserDetails
 import com.example.submission3.model.UserItem
@@ -37,6 +38,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     var userName: String = "a"
+    var userDetailName: String = ""
 
     fun getUser() {
         loading.value = true
@@ -63,10 +65,17 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getUserDetail(username: String) {
+    fun getUserNameDetail(username: String): LiveData<Response<UserDetails>> {
+        if (username != null) {
+            userDetailName = username
+        }
+        return userDetails
+    }
+
+    fun getUserDetail() {
         loading.value = true
         viewModelScope.launch {
-            val response = repository.getUserDetail(username)
+            val response = repository.getUserDetail(userDetailName)
             _userDetails.value = response
         }
     }
@@ -74,8 +83,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun getUserFollower(username: String) {
         loading.value = true
         viewModelScope.launch {
-            val response = repository.getUserFollower(username)
-            _userFollower.value = response
+            //val response = repository.getUserFollower(username)
+            _userFollower.value = repository.getUserFollower(username)
             loading.value = false
         }
     }

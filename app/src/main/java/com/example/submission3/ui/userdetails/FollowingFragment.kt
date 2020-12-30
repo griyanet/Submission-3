@@ -8,10 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.submission3.MainViewModel
-import com.example.submission3.MainViewModelFactory
-import com.example.submission3.R
-import com.example.submission3.Repository
+import com.example.submission3.viewmodel.MainViewModel
+import com.example.submission3.viewmodel.MainViewModelFactory
+import com.example.submission3.repository.Repository
 import com.example.submission3.adapter.FollowerAdapter
 import com.example.submission3.databinding.FragmentFollowingBinding
 

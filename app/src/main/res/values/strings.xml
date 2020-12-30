@@ -33,6 +33,7 @@
     <string name="location_icon">location_icon</string>
     <string name="company_icon">company icon</string>
     <string name="company">company</string>
-    <string name="lblfollower">lblfollower</string>
-    <string name="lblfollowing">lblfollowing</string>
+    <string name="lblfollower">Follower: </string>
+    <string name="lblfollowing">Following: </string>
+    <string name="add_favorite_user">Add Favorite User</string>
 </resources>

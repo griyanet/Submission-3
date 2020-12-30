@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userDetailFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.userdetails.UserDetail">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.userdetails.UserDetailFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_avatar"
@@ -37,18 +42,17 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="4dp" />
 
-    <TextView
-        android:id="@+id/dashSign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:text="@string/dash"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@id/tv_name"
-        app:layout_constraintStart_toEndOf="@id/tv_loginId"
-        app:layout_constraintTop_toBottomOf="@id/img_avatar" />
+        <TextView
+            android:id="@+id/dashSign"
+            android:layout_width="15dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/dash"
+            android:textSize="12sp"
+            app:tint = "@color/black"
+            app:layout_constraintTop_toBottomOf="@id/img_avatar"
+            app:layout_constraintEnd_toStartOf="@id/tv_name"
+            app:layout_constraintStart_toEndOf="@id/tv_loginId"/>
 
     <TextView
         android:id="@+id/tv_name"
@@ -61,7 +65,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/img_avatar"
+        app:layout_constraintTop_toBottomOf="@id/img_avatar"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="32dp" />
 
@@ -70,27 +74,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="1dp"
         android:src="@drawable/ic_location"
         app:layout_constraintEnd_toStartOf="@+id/tv_location"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         android:contentDescription="@string/location_icon"
-        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_location"
         android:layout_marginLeft="4dp"
-        android:layout_marginRight="1dp" />
+        android:layout_marginRight="1dp"
+        app:tint="@color/purple_200" />
 
     <TextView
         android:id="@+id/tv_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/label_company"
         app:layout_constraintStart_toEndOf="@id/label_location"
-        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/label_company"
         tools:text="@string/location"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="4dp" />
@@ -100,22 +103,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="1dp"
         android:src="@drawable/ic_business"
         app:layout_constraintEnd_toStartOf="@+id/tv_company"
         app:layout_constraintStart_toEndOf="@+id/guideline2"
         android:contentDescription="@string/company_icon"
-        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_company"
         android:layout_marginLeft="4dp"
-        android:layout_marginRight="1dp" />
+        android:layout_marginRight="1dp"
+        app:tint="@color/purple_200"/>
 
     <TextView
         android:id="@+id/tv_company"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="4dp"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -214,11 +217,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
+        android:layout_height="550dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -238,4 +241,24 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="8dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="@string/add_favorite_user"
+            android:focusable="true"
+            tools:src="@drawable/ic_favorite_full"
+            app:maxImageSize="35sp"
+            android:tint="@color/white"
+            app:backgroundTint="#E91E63"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.94"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintVertical_bias="0.83" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
