@@ -36,4 +36,15 @@
     <string name="lblfollower">Follower: </string>
     <string name="lblfollowing">Following: </string>
     <string name="add_favorite_user">Add Favorite User</string>
+    <string name="set_one_time_alarm">Set One Time Alarm</string>
+    <string name="go_to_setting_alarm">Go to Setting Alarm</string>
+    <string name="cancel_scheduled_alarm">Cancel scheduled Alarm</string>
+    <string name="set_one_time_alarm">Set One Time Alarm</string>
+    <string name="type_message_here">Type message here</string>
+    <string name="alarm_time">Alarm Time</string>
+    <string name="time_icon">Time Icon</string>
+    <string name="alarm_date">Alarm Date</string>
+    <string name="date_icon">Date Icon</string>
+    <string name="one_time_alarm">One Time Alarm</string>
+    <string name="click_here_to_set_up_alarm_at_9am">Click here to set up Alarm at 9am</string>
 </resources>

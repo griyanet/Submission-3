@@ -6,13 +6,13 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:id="@+id/AlarmSetting"
-    tools:context=".alarm.AlarmFragment">
+    tools:context=".alarm.ScheduleAlarmActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="One Time Alarm"
+        android:text="@string/one_time_alarm"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -27,13 +27,13 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_date_range_black"
-            android:contentDescription="Date Icon" />
+            android:contentDescription="@string/date_icon" />
 
         <TextView
             android:id="@+id/tv_once_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alarm Date" />
+            android:text="@string/alarm_date" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,13 +47,13 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_access_time_black"
-            android:contentDescription="Time Icon" />
+            android:contentDescription="@string/time_icon" />
 
         <TextView
             android:id="@+id/tv_once_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alarm Time" />
+            android:text="@string/alarm_time" />
     </LinearLayout>
 
     <EditText
@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="Type message here"
+        android:hint="@string/type_message_here"
         android:inputType="text"
         android:autofillHints="Alarm Message" />
 
@@ -70,6 +70,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Set One Time Alarm"/>
+        android:text="@string/set_one_time_alarm" />
+
+    <Button
+        android:id="@+id/btn_cancel_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/cancel_scheduled_alarm" />
 
 </LinearLayout>

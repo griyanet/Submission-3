@@ -56,6 +56,9 @@ class ScheduleAlarmActivity : AppCompatActivity(), View.OnClickListener,
                         onceMessage
                     )
                 }
+                R.id.btn_cancel_alarm -> {
+                    alarmReceiver.cancelAlarm(this)
+                }
             }
         }
     }

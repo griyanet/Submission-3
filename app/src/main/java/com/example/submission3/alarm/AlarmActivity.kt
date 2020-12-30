@@ -1,12 +1,9 @@
 package com.example.submission3.alarm
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import com.example.submission3.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.submission3.databinding.ActivityAlarmBinding
-import java.text.SimpleDateFormat
-import java.util.*
 
 class AlarmActivity : AppCompatActivity() {
 
@@ -23,7 +20,12 @@ class AlarmActivity : AppCompatActivity() {
         val message = "This alarm set at 9am"
         binding?.btnSetOnceAlarm?.setOnClickListener {
             alarmReceiver.setOneTimeAlarm(
-                this, AlarmReceiver.TYPE_ALARM, message)
+                this, AlarmReceiver.TYPE_ALARM, message
+            )
+        }
+        binding?.btnSetAlarm?.setOnClickListener {
+            val intent = Intent(this, ScheduleAlarmActivity::class.java)
+            startActivity(intent)
         }
     }
 

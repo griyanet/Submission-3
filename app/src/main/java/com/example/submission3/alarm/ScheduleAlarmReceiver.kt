@@ -129,4 +129,16 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
         val notification = builder.build()
         notificationManagerCompat.notify(notifyId, notification)
     }
+
+    fun cancelAlarm(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, ScheduleAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, ID_ONETIME, intent, 0)
+        pendingIntent.cancel()
+
+        alarmManager.cancel(pendingIntent)
+
+        Toast.makeText(context, "Repeating alarm dibatalkan", Toast.LENGTH_SHORT).show()
+    }
+
 }

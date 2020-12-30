@@ -7,17 +7,15 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.submission3.viewmodel.MainViewModel
-import com.example.submission3.viewmodel.MainViewModelFactory
 import com.example.submission3.R
-import com.example.submission3.repository.Repository
 import com.example.submission3.adapter.UserQueryAdapter
 import com.example.submission3.alarm.AlarmActivity
-import com.example.submission3.alarm.AlarmFragment
 import com.example.submission3.databinding.FragmentHomeBinding
 import com.example.submission3.model.Item
+import com.example.submission3.repository.Repository
+import com.example.submission3.viewmodel.MainViewModel
+import com.example.submission3.viewmodel.MainViewModelFactory
 
 class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
