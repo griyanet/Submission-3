@@ -15,11 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Submission3">
+        <activity android:name=".alarm.ScheduleAlarmActivity"></activity>
+
         <provider
             android:name=".cp.FavoriteContentProvider"
             android:authorities="com.example.submission3"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
         <activity android:name=".alarm.AlarmActivity" />
 
