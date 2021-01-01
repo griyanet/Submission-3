@@ -113,33 +113,7 @@ class UserDetailFragment : Fragment() {
     }
 
     private fun checkIsFavorite() {
-        favoritesViewModel.findByLogin(args.Item.login)
 
-        favoritesViewModel.favLogin.observe(viewLifecycleOwner, { favLogin ->
-            Log.d("argsLogin", args.Item.login)
-            Log.d("favLogin", favLogin.login)
-            try {
-                if (args.Item.login == favLogin.login) {
-                    binding.fabFavorite.setImageDrawable(activity?.let { button ->
-                        getDrawable(
-                            button,
-                            R.drawable.ic_favorite_full
-                        )
-                    })
-                    savedFavorite = true
-                } else {
-                    binding.fabFavorite.setImageDrawable(activity?.let { button ->
-                        getDrawable(
-                            button,
-                            R.drawable.ic_delete
-                        )
-                    })
-                    savedFavorite = false
-                }
-            } catch (e: Exception) {
-                Log.d("checkIsFavorite()", e.message.toString())
-            }
-        })
     }
 
     private fun saveToFavorites() {

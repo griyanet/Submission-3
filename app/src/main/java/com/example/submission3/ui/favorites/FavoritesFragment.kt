@@ -40,7 +40,6 @@ class FavoritesFragment : Fragment() {
         setupRecyclerView()
 
         fadeIn()
-        viewModel.loading.value = false
 
         return binding.root
     }

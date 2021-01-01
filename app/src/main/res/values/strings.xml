@@ -24,7 +24,7 @@
     <string name="follower_url">Follower URL</string>
     <string name="following_url">Following URL</string>
     <string name="avatar_image">Avatar Image</string>
-    <string name="no_Internet">Could not retrieve data. Trying again...</string>
+    <string name="no_Internet">Could not retrieve data. Trying again…</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -39,7 +39,6 @@
     <string name="set_one_time_alarm">Set One Time Alarm</string>
     <string name="go_to_setting_alarm">Go to Setting Alarm</string>
     <string name="cancel_scheduled_alarm">Cancel scheduled Alarm</string>
-    <string name="set_one_time_alarm">Set One Time Alarm</string>
     <string name="type_message_here">Type message here</string>
     <string name="alarm_time">Alarm Time</string>
     <string name="time_icon">Time Icon</string>

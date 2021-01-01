@@ -8,7 +8,7 @@ class FavoritesUserRepository(private val favoritesDao: FavoritesDao) {
 
     val readAllData: LiveData<List<Item>> = favoritesDao.readAll()
 
-    suspend fun addFavorite(favorite: Item) {
+    fun addFavorite(favorite: Item) {
         favoritesDao.insertFavorite(favorite)
     }
 
@@ -16,9 +16,7 @@ class FavoritesUserRepository(private val favoritesDao: FavoritesDao) {
         favoritesDao.deleteFavorite(favorite)
     }
 
-    suspend fun findByLogin(login: String): Item {
-        return favoritesDao.findByLogin(login)
-    }
+    fun isExist(id: Int) = favoritesDao.exists(id)
 
     suspend fun deleteAllFavorites() {
         favoritesDao.deleteAllFavorites()
