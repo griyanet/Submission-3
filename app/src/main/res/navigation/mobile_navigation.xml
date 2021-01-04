@@ -49,9 +49,9 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_alarm"
-        android:name="com.example.submission3.alarm.AlarmFragment"
-        android:label="fragment_alarm"
-        tools:layout="@layout/fragment_alarm" />
+        android:name="com.example.submission3.alarm.AlarmActivity"
+        android:label="Setup Alarm"
+        tools:layout="@layout/activity_alarm" />
     <activity
         android:id="@+id/alarmActivity"
         android:name="com.example.submission3.alarm.AlarmActivity"

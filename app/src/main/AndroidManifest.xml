@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <permission android:name="com.example.submission3.READ_DATABASE" android:protectionLevel="normal"/>
+    <permission android:name="com.example.submission3.WRITE_DATABASE" android:protectionLevel="normal" />
 
     <application
         android:allowBackup="true"
@@ -15,20 +17,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Submission3">
+
         <activity android:name=".alarm.ScheduleAlarmActivity" />
-
-        <provider
-            android:name=".cp.FavoriteContentProvider"
-            android:authorities="com.example.submission3"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity android:name=".alarm.AlarmActivity" />
 
-        <receiver
-            android:name=".alarm.AlarmReceiver"
+        <provider
+            android:authorities="com.example.submission3"
+            android:name=".provider.FavoriteContentProvider"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:readPermission="com.example.submission3.READ_DATABASE"
+            android:writePermission="com.example.submission3.WRITE_DATABASE"/>
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -42,6 +41,11 @@
             android:name=".alarm.ScheduleAlarmReceiver"
             android:enabled="true"
             android:exported="true" />
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>

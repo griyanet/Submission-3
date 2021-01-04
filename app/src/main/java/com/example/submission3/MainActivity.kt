@@ -1,6 +1,10 @@
 package com.example.submission3
 
+import android.database.ContentObserver
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -28,6 +32,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_alarm
             )
         )
+
+        /*val handlerThread =HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+        val myObserver = object: ContentObserver(handler)*/
+
 
         binding.navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)

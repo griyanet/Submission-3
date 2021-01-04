@@ -1,8 +1,8 @@
-package com.example.submission3.cp
+package com.example.consumerapp.repository
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.example.submission3.model.Item
+import com.example.consumerapp.model.Item
 
 const val COLUMN_ID = "id"
 const val COLUMN_AVATAR_URL = "avatar_url"
