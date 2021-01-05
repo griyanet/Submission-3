@@ -22,6 +22,7 @@ internal class DatabaseHelper(context: Context) :
         private const val SQL_CREATE_TABLE_FAVORITE =
             "CREATE TABLE ${DatabaseContract.FavoriteColumns.TABLE_NAME}" +
                     "(${DatabaseContract.FavoriteColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "${DatabaseContract.FavoriteColumns.ITEM_ID} INTEGER NOT NULL," +
                     "${DatabaseContract.FavoriteColumns.AVATAR_URL} TEXT NOT NULL," +
                     "${DatabaseContract.FavoriteColumns.FOLLOWER_URL} TEXT NOT NULL," +
                     "${DatabaseContract.FavoriteColumns.FOLLOWING_URL} TEXT NOT NULL," +

@@ -9,9 +9,15 @@ import com.example.submission3.databinding.RowItemfavoritesBinding
 import com.example.submission3.model.Item
 import com.example.submission3.ui.favorites.FavoritesFragmentDirections
 
-class FavoriteAdapter(private var list: List<Item>) :
+class FavoriteAdapter() :
     RecyclerView.Adapter<FavoriteAdapter.MyViewHolder>() {
 
+    var listFav = ArrayList<Item>()
+        set(lisFav) {
+            this.listFav.clear()
+            this.listFav.addAll(lisFav)
+            notifyDataSetChanged()
+        }
 
     class MyViewHolder(val binding: RowItemfavoritesBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -47,9 +53,9 @@ class FavoriteAdapter(private var list: List<Item>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(listFav[position])
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = listFav.size
 
 }

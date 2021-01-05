@@ -50,8 +50,7 @@ class FavoriteContentProvider : ContentProvider() {
             sUriMatcher.match(uri) -> values?.let { favHelper.insert(it) }
             else -> 0
         }
-        val iContext = requireContext()
-        iContext.contentResolver.notifyChange(CONTEN_URI, null)
+        requireContext().contentResolver.notifyChange(CONTEN_URI, null)
         return Uri.parse("$CONTEN_URI/$added")
     }
 
@@ -60,8 +59,7 @@ class FavoriteContentProvider : ContentProvider() {
             sUriMatcher.match(uri) -> favHelper.deleteByID(uri.lastPathSegment.toString())
             else -> 0
         }
-        val iContext = requireContext()
-        iContext.contentResolver.notifyChange(CONTEN_URI, null)
+        requireContext().contentResolver.notifyChange(CONTEN_URI, null)
         return deleted
     }
 
@@ -79,8 +77,7 @@ class FavoriteContentProvider : ContentProvider() {
             }
             else -> 0
         }
-        val iContext = requireContext()
-        iContext.contentResolver.notifyChange(CONTEN_URI, null)
+        requireContext().contentResolver.notifyChange(CONTEN_URI, null)
         return updated!!
     }
 }

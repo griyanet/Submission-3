@@ -1,24 +1,16 @@
 package com.example.submission3.ui.favorites
 
 import android.app.AlertDialog
-import android.content.Context
-import android.database.ContentObserver
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.submission3.R
 import com.example.submission3.adapter.FavoriteAdapter
 import com.example.submission3.database.DatabaseContract.FavoriteColumns.Companion.CONTEN_URI
 import com.example.submission3.databinding.FavoritesFragmentBinding
-import com.example.submission3.model.Item
 import com.example.submission3.provider.MappingHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -28,10 +20,9 @@ import kotlinx.coroutines.launch
 
 class FavoritesFragment : Fragment() {
 
-    private var listFavoritesUser: MutableList<Item> = mutableListOf()
     private var _binding: FavoritesFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var favoriteAdapter: FavoriteAdapter
+    private lateinit var adapter: FavoriteAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,19 +30,9 @@ class FavoritesFragment : Fragment() {
     ): View {
         _binding = FavoritesFragmentBinding.inflate(inflater, container, false)
 
-        val handlerThread = HandlerThread("DataObserver")
-        handlerThread.start()
-        val handler = Handler(handlerThread.looper)
 
-        val myObserver = object : ContentObserver(handler) {
-            override fun onChange(self: Boolean) {
-                loadFavorites()
-            }
-        }
-        val iContext = requireContext()
-        iContext.contentResolver.registerContentObserver(CONTEN_URI, true, myObserver)
 
-        favoriteAdapter = FavoriteAdapter(listFavoritesUser)
+        adapter = FavoriteAdapter()
         setHasOptionsMenu(true)
         setupRecyclerView()
 
@@ -60,25 +41,44 @@ class FavoritesFragment : Fragment() {
         return binding.root
     }
 
-    private fun queryAll(context: Context): LiveData<List<Item>> {
+    /*private fun queryAll(context: Context): LiveData<List<Item>> {
         val liveData = MutableLiveData<List<Item>>()
-        val cursor = context.contentResolver.query(CONTEN_URI, null, null, null, null)
+        val cursor = requireActivity().applicationContext.contentResolver.query(CONTEN_URI, null, null, null, null)
         cursor?.let {
             liveData.postValue(MappingHelper.mapCursorToArrayList(it))
             cursor.close()
         }
         return liveData
-    }
+    }*/
 
-    private fun loadFavorites() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         GlobalScope.launch(Dispatchers.Main) {
             binding.progressBarFav.visibility = View.VISIBLE
-
-            queryAll(context = requireContext()).observe(this@FavoritesFragment, {
-                listFavoritesUser.addAll(it)
-            })
+            val deferredFav = async(Dispatchers.IO) {
+                val cursor = requireActivity().applicationContext.contentResolver.query(
+                    CONTEN_URI,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                Log.i("cursor", cursor.toString())
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
+            val items = deferredFav.await()
+            Log.i("items", items.toString())
+            if (items.size > 0) {
+                adapter.listFav = items
+                showSnackBar("Congratulations!. There are ${adapter.listFav.size} users in the list")
+            } else {
+                adapter.listFav = ArrayList()
+                showSnackBar("There is no list of Favorite Users yet!")
+                binding.progressBarFav.visibility = View.GONE
+            }
         }
-        binding.progressBarFav.visibility = View.INVISIBLE
+        binding.progressBarFav.visibility = View.GONE
     }
 
 
@@ -110,7 +110,7 @@ class FavoritesFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.rvUserFav.setHasFixedSize(true)
-        binding.rvUserFav.adapter = favoriteAdapter
+        binding.rvUserFav.adapter = adapter
         binding.rvUserFav.layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -119,6 +119,15 @@ class FavoritesFragment : Fragment() {
             alpha(0f)
             duration = 3000
         }.start()
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(
+            binding.favoritesFragment,
+            message,
+            Snackbar.LENGTH_SHORT
+        ).setAction("Okay") {}
+            .show()
     }
 
 }

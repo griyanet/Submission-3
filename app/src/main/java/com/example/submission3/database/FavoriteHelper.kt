@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
+import com.example.submission3.database.DatabaseContract.FavoriteColumns.Companion.ITEM_ID
 import com.example.submission3.database.DatabaseContract.FavoriteColumns.Companion.TABLE_NAME
 import com.example.submission3.database.DatabaseContract.FavoriteColumns.Companion._ID
 

@@ -90,6 +90,7 @@ class UserDetailFragment : Fragment() {
         }.attach()
 
         if (savedInstanceState == null) {
+            Log.i("savedInstanceState", savedInstanceState.toString())
             initFavorites()
         } else {
             savedInstanceState.getParcelableArrayList<Item>(EXTRA_STATE).also {
@@ -123,8 +124,6 @@ class UserDetailFragment : Fragment() {
             } else {
                 saveToFavorites()
             }
-
-            findNavController().navigate(R.id.action_userDetailFragment_to_navigation_favorites)
         }
 
         binding.fabFavorite.setImageDrawable(activity?.let { button ->
@@ -152,26 +151,32 @@ class UserDetailFragment : Fragment() {
     private fun initFavorites() {
         GlobalScope.launch(Dispatchers.Main) {
             val deferredFav = async(Dispatchers.IO) {
-                val iContext = requireContext()
-                val cursor = iContext.contentResolver.query(CONTEN_URI, null, null, null, null)
+                val cursor = requireActivity().applicationContext.contentResolver.query(
+                    CONTEN_URI,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                Log.i("cursor", cursor.toString())
                 MappingHelper.mapCursorToArrayList(cursor)
             }
             val items = deferredFav.await()
+            Log.i("items", items.toString())
             if (items.size > 0) {
-                listFav = items
+                listFav.addAll(items)
             } else {
                 listFav = ArrayList()
-                Log.d("lisFav", listFav.toString())
             }
         }
     }
 
-    private fun insertValues(item: Item, context: Context) {
-        context.contentResolver.insert(CONTEN_URI, item.toValues())
-    }
     private fun saveToFavorites() {
         val userFavorite = args.Item
-        insertValues(userFavorite, context = requireContext())
+        requireActivity().applicationContext.contentResolver.insert(
+            CONTEN_URI,
+            userFavorite.toValues()
+        )
     }
 
     private fun removeFavorite() {
@@ -179,8 +184,7 @@ class UserDetailFragment : Fragment() {
         builder.setPositiveButton("Yes") { _, _ ->
             val currentFav = args.Item.id
             uriWithID = Uri.parse("$CONTEN_URI/$currentFav")
-            val iContext = requireContext()
-            iContext.contentResolver.delete(CONTEN_URI, uriWithID.toString(), null)
+            requireActivity().applicationContext.contentResolver.delete(CONTEN_URI, uriWithID.toString(), null)
             Snackbar.make(
                 binding.userDetailFragment,
                 "Successfully deleted article",

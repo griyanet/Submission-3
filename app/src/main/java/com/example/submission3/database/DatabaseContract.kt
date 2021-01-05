@@ -11,6 +11,7 @@ object DatabaseContract {
         companion object {
             const val TABLE_NAME = "favorite_table"
             const val _ID = "_id"
+            const val ITEM_ID = "itemId"
             const val AVATAR_URL = "avatarUrl"
             const val FOLLOWER_URL = "followersUrl"
             const val FOLLOWING_URL = "followingUrl"
