@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.submission3.R
 import com.example.submission3.adapter.FavoriteAdapter
@@ -41,16 +42,6 @@ class FavoritesFragment : Fragment() {
         return binding.root
     }
 
-    /*private fun queryAll(context: Context): LiveData<List<Item>> {
-        val liveData = MutableLiveData<List<Item>>()
-        val cursor = requireActivity().applicationContext.contentResolver.query(CONTEN_URI, null, null, null, null)
-        cursor?.let {
-            liveData.postValue(MappingHelper.mapCursorToArrayList(it))
-            cursor.close()
-        }
-        return liveData
-    }*/
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -72,10 +63,10 @@ class FavoritesFragment : Fragment() {
             if (items.size > 0) {
                 adapter.listFav = items
                 showSnackBar("Congratulations!. There are ${adapter.listFav.size} users in the list")
+                binding.progressBarFav.visibility = View.GONE
             } else {
                 adapter.listFav = ArrayList()
                 showSnackBar("There is no list of Favorite Users yet!")
-                binding.progressBarFav.visibility = View.GONE
             }
         }
         binding.progressBarFav.visibility = View.GONE
@@ -96,12 +87,13 @@ class FavoritesFragment : Fragment() {
     private fun deleteAllFavoriteUsers() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-            //todos
+            requireActivity().applicationContext.contentResolver.delete(CONTEN_URI, null, null)
             Toast.makeText(
                 requireContext(),
                 "Successfully remove all Favorite Users!",
                 Toast.LENGTH_SHORT
             ).show()
+            findNavController().navigate(R.id.navigation_home)
         }
         builder.setNegativeButton("No") { _, _ -> }
         builder.setTitle("Delete All Favorites")

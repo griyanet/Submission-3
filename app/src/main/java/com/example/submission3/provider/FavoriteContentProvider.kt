@@ -16,11 +16,13 @@ class FavoriteContentProvider : ContentProvider() {
     companion object {
         private const val FAVORITES = 1
         private const val FAVORITE_ID = 2
+        private const val FAVORITE_ITEM_ID = 3
         private lateinit var favHelper: FavoriteHelper
         private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH)
         init {
             sUriMatcher.addURI(AUTHORITY, TABLE_NAME, FAVORITES)
             sUriMatcher.addURI(AUTHORITY, "$TABLE_NAME/#", FAVORITE_ID)
+            sUriMatcher.addURI(AUTHORITY, "$TABLE_NAME/ITEM/#", FAVORITE_ITEM_ID)
         }
     }
 
@@ -37,6 +39,7 @@ class FavoriteContentProvider : ContentProvider() {
         return when (sUriMatcher.match(uri)) {
             FAVORITES -> favHelper.queryAll()
             FAVORITE_ID -> favHelper.queryByID(uri.lastPathSegment.toString())
+            FAVORITE_ITEM_ID -> favHelper.queryByItemID(uri.lastPathSegment.toString())
             else -> null
         }
     }

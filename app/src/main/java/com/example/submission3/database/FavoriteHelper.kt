@@ -58,6 +58,17 @@ class FavoriteHelper(context: Context) {
             null)
     }
 
+    fun queryByItemID(id: String): Cursor {
+        return database.query(
+            DATABASE_TABLE,
+            null,
+            "$ITEM_ID = ?", arrayOf(id),
+            null,
+            null,
+            null,
+            null)
+    }
+
     fun insert(values: ContentValues): Long {
         return database.insert(DATABASE_TABLE, null, values)
     }
@@ -67,6 +78,10 @@ class FavoriteHelper(context: Context) {
     }
 
     fun deleteByID(id: String): Int {
-        return database.delete(DATABASE_TABLE, "$_ID = '$id'", null)
+        return database.delete(DATABASE_TABLE, "$ITEM_ID = '$id'", null)
+    }
+
+    fun deleteAll(): Int {
+        return database.delete(TABLE_NAME, null, null)
     }
 }
