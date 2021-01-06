@@ -67,9 +67,11 @@ class FavoritesFragment : Fragment() {
             } else {
                 adapter.listFav = ArrayList()
                 showSnackBar("There is no list of Favorite Users yet!")
+                binding.progressBarFav.visibility = View.GONE
             }
         }
         binding.progressBarFav.visibility = View.GONE
+
     }
 
 

@@ -13,6 +13,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.example.submission3.MainActivity
 import com.example.submission3.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -101,7 +102,7 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
-        val intent = Intent(context, ScheduleAlarmActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
