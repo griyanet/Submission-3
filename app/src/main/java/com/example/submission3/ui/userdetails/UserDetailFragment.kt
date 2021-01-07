@@ -197,7 +197,7 @@ class UserDetailFragment : Fragment() {
         builder.setPositiveButton("Yes") { _, _ ->
             val currentFav = findFavId(args.Item.id)
             uriWithID = Uri.parse("$CONTEN_URI/$currentFav")
-            val res = requireActivity().applicationContext.contentResolver.delete(CONTEN_URI, currentFav.toString(), null)
+            val res = requireActivity().applicationContext.contentResolver.delete(uriWithID, currentFav.toString(), null)
             Snackbar.make(
                 binding.userDetailFragment,
                 "Successfully deleted article",

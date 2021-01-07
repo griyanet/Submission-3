@@ -1,11 +1,11 @@
 package com.example.consumerapp.ui.userdetails
 
 import android.app.AlertDialog
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,28 +15,38 @@ import com.example.consumerapp.R
 import com.example.consumerapp.adapter.ViewPagerAdapter
 import com.example.consumerapp.databinding.FragmentUserDetailBinding
 import com.example.consumerapp.db.DatabaseContract.FavoriteColumns.Companion.CONTEN_URI
+import com.example.consumerapp.db.MappingHelper
+import com.example.consumerapp.db.MappingHelper.toValues
+import com.example.consumerapp.model.Item
 import com.example.consumerapp.repository.Repository
-import com.example.consumerapp.ui.favorites.FavoritesViewModel
 import com.example.consumerapp.viewmodel.MainViewModel
 import com.example.consumerapp.viewmodel.MainViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class UserDetailFragment : Fragment() {
 
     private val args by navArgs<UserDetailFragmentArgs>()
     private lateinit var viewModel: MainViewModel
-    private lateinit var favoritesViewModel: FavoritesViewModel
     private var _binding: FragmentUserDetailBinding? = null
     private val binding get() = _binding!!
     private var savedFavorite = false
+    private lateinit var uriWithID: Uri
+    private var listFav = ArrayList<Item>()
+
+    companion object {
+        private const val EXTRA_STATE = "EXTRA_STATE"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
-        favoritesViewModel = ViewModelProvider(this).get(FavoritesViewModel::class.java)
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
@@ -78,18 +88,24 @@ class UserDetailFragment : Fragment() {
             }
         }.attach()
 
-        checkIsFavorite()
-        Log.d("argsItemId", args.Item.login)
-        Log.d("savedFavorite", savedFavorite.toString())
+        if (savedInstanceState == null) {
+            Log.i("savedInstanceState", savedInstanceState.toString())
+            initFavorites()
+        } else {
+            savedInstanceState.getParcelableArrayList<Item>(EXTRA_STATE).also {
+                val savedId = it?.first()?.login
+                Log.i("savedId", savedId.toString())
+                val argsId = args.Item.login
+                Log.i("argsId", argsId.toString())
+            }
+        }
 
         binding.fabFavorite.setOnClickListener {
             if (savedFavorite) {
-                //removeFavorite()
+                removeFavorite()
             } else {
                 saveToFavorites()
             }
-
-            findNavController().navigate(R.id.action_favoritesFragment_to_userDetailFragment2)
         }
 
         binding.fabFavorite.setImageDrawable(activity?.let { button ->
@@ -114,29 +130,77 @@ class UserDetailFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun checkIsFavorite() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+
+    }
+    private fun initFavorites() {
+        GlobalScope.launch(Dispatchers.Main) {
+            val deferredFav = async(Dispatchers.IO) {
+                val currentFav = findFavId(args.Item.id)
+                val uriItemId = Uri.parse("$CONTEN_URI/ITEM/$currentFav")
+                val cursor = requireActivity().applicationContext.contentResolver.query(
+                    uriItemId,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                Log.i("cursor", cursor.toString())
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
+            val items = deferredFav.await()
+            Log.i("items", items.toString())
+            savedFavorite = items.size > 0
+            if (savedFavorite) {
+                binding.fabFavorite.setImageDrawable(activity?.let { button ->
+                    getDrawable(
+                        button,
+                        R.drawable.ic_delete
+                    )
+                })
+            } else {
+                binding.fabFavorite.setImageDrawable(activity?.let { button ->
+                    getDrawable(
+                        button,
+                        R.drawable.ic_favorite_full
+                    )
+                })
+            }
+        }
     }
 
     private fun saveToFavorites() {
         val userFavorite = args.Item
-        context?.let { favoritesViewModel.insertFavorite(it, userFavorite) }
-        showSnackBar("Congratulations! User (${args.Item.login}) added to Favorite")
-        savedFavorite = true
+        requireActivity().applicationContext.contentResolver.insert(
+            CONTEN_URI,
+            userFavorite.toValues()
+        )
+        showSnackBar("Successfully added Favorite User to the list!")
+        findNavController().navigate(R.id.action_userDetailFragment2_to_favoritesFragment)
+    }
+
+    private fun findFavId(itemId: Int): Int {
+        val uriItemId = Uri.parse("$CONTEN_URI/ITEM/$itemId")
+        val cursor = requireActivity().applicationContext.contentResolver.query(uriItemId, null, null, null, null)
+        val favItemList = MappingHelper.mapCursorToArrayList(cursor)
+        return if (favItemList.size > 0) {
+            favItemList.first().id
+        } else {
+            0
+        }
     }
 
     private fun removeFavorite() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
-            val currentId = args.Item.id
-            val uRi = CONTEN_URI.toString()
-            val selection = "$uRi/$currentId"
-            val contentUri = selection.toUri()
-            context?.let { favoritesViewModel.deleteFavorite(it, contentUri) }
-            savedFavorite = true
+            val currentFav = findFavId(args.Item.id)
+            uriWithID = Uri.parse("$CONTEN_URI/$currentFav")
+            val res = requireActivity().applicationContext.contentResolver.delete(uriWithID, currentFav.toString(), null)
             Snackbar.make(
                 binding.userDetailFragment,
-                "Successfully deleted a favorite user",
+                "Successfully deleted article",
                 Snackbar.LENGTH_LONG
             ).apply {
                 setAction("Undo") {
@@ -144,13 +208,22 @@ class UserDetailFragment : Fragment() {
                 }
                 show()
             }
-            findNavController().navigate(R.id.action_userDetailFragment2_to_favoritesFragment)
+            if (res > 0) {
+                findNavController().navigate(R.id.action_userDetailFragment2_to_favoritesFragment)
+            } else {
+                findNavController().navigate(R.id.homeFragment)
+            }
         }
         builder.setNegativeButton("No") { _, _ -> }
         builder.setTitle("Delete current Favorite")
         builder.setMessage("Are you sure want to delete (${args.Item.login})?")
         builder.create().show()
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(EXTRA_STATE, listFav)
     }
 
     private fun showSnackBar(message: String) {
