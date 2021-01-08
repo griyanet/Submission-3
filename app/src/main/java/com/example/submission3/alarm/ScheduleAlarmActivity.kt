@@ -50,7 +50,7 @@ class ScheduleAlarmActivity : AppCompatActivity(), View.OnClickListener,
                     val onceMessage = binding?.edtOnceMessage?.text.toString()
 
                     alarmReceiver.setOneTimeAlarm(
-                        this, ScheduleAlarmReceiver.TYPE_ALARM,
+                        this, ScheduleAlarmReceiver.EXTRA_TITLE,
                         onceDate,
                         onceTime,
                         onceMessage

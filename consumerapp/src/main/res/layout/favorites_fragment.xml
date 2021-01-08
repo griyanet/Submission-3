@@ -49,6 +49,7 @@
             android:background="@android:color/black"
             tools:visibility="gone" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_user_fav"
             android:layout_width="match_parent"
@@ -60,6 +61,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/row_itemfavorites" />
+
+        <include
+            android:id="@+id/noFavoriteUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/sub_favorite"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -1,17 +1,19 @@
-package com.example.submission3.alarm
+package com.example.submission3.ui.alarm
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.example.submission3.databinding.ActivityAlarmBinding
+import androidx.fragment.app.Fragment
+import com.example.submission3.alarm.AlarmActivity
+import com.example.submission3.alarm.AlarmReceiver
+import com.example.submission3.databinding.FragmentSetupAlarmBinding
 
-class AlarmActivity : AppCompatActivity() {
+class SetupAlarm : Fragment() {
 
-    private var _binding: ActivityAlarmBinding? = null
+    private var _binding: FragmentSetupAlarmBinding? = null
     private val binding get() = _binding!!
     private lateinit var alarmReceiver: AlarmReceiver
 
@@ -20,9 +22,11 @@ class AlarmActivity : AppCompatActivity() {
         const val IS_ENABLED = "isChecked"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityAlarmBinding.inflate(layoutInflater)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentSetupAlarmBinding.inflate(inflater, container, false)
 
         binding.toggleAlarm.isChecked = getToggle()
         binding.toggleAlarm.isClickable
@@ -31,11 +35,10 @@ class AlarmActivity : AppCompatActivity() {
         }
 
         binding.btnSetAlarm.setOnClickListener {
-            val intent = Intent(this, ScheduleAlarmActivity::class.java)
-            startActivity(intent)
+
         }
 
-        setContentView(binding.root)
+        return binding.root
     }
 
     private fun setAlarm(isChecked: Boolean) {
@@ -43,18 +46,18 @@ class AlarmActivity : AppCompatActivity() {
             val title = "My Github App"
             val message = "This alarm set at 9am"
             alarmReceiver = AlarmReceiver()
-            alarmReceiver.setOneTimeAlarm(applicationContext, title, message)
+            context?.let { alarmReceiver.setOneTimeAlarm(it, title, message) }
             Toast.makeText(
-                applicationContext,
+                context,
                 "One time alarm at 09.00 AM has been set up!",
                 Toast.LENGTH_SHORT
             ).show()
             toggleOn()
         } else {
             alarmReceiver = AlarmReceiver()
-            alarmReceiver.cancelAlarm(applicationContext)
+            context?.let { alarmReceiver.cancelAlarm(it) }
             Toast.makeText(
-                applicationContext,
+                context,
                 "One time alarm at 09.00 AM has been cancelled!",
                 Toast.LENGTH_SHORT
             ).show()
@@ -63,26 +66,30 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun toggleOn() {
-        val sharedPref = applicationContext.getSharedPreferences(ALARM_PREF, Context.MODE_PRIVATE)
+        val sharedPref =
+            requireActivity().getSharedPreferences(AlarmActivity.ALARM_PREF, Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.putBoolean(IS_ENABLED, true)
+        editor.putBoolean(AlarmActivity.IS_ENABLED, true)
         editor.apply()
     }
 
     private fun toggleOff() {
-        val sharedPref = applicationContext.getSharedPreferences(ALARM_PREF, Context.MODE_PRIVATE)
+        val sharedPref =
+            requireActivity().getSharedPreferences(AlarmActivity.ALARM_PREF, Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.putBoolean(IS_ENABLED, false)
+        editor.putBoolean(AlarmActivity.IS_ENABLED, false)
         editor.apply()
     }
 
     private fun getToggle(): Boolean {
-        val sharedPref = applicationContext.getSharedPreferences(ALARM_PREF, Context.MODE_PRIVATE)
-        return sharedPref.getBoolean(IS_ENABLED, true)
+        val sharedPref =
+            requireActivity().getSharedPreferences(AlarmActivity.ALARM_PREF, Context.MODE_PRIVATE)
+        return sharedPref.getBoolean(AlarmActivity.IS_ENABLED, true)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
 }

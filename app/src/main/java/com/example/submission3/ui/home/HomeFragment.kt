@@ -64,7 +64,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                 val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
                 startActivity(mIntent)
             }
-            R.id.navigation_alarm -> {
+            R.id.activity_alarm -> {
                 val intent = Intent(activity, AlarmActivity::class.java)
                 startActivity(intent)
             }

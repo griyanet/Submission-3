@@ -13,6 +13,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.example.submission3.MainActivity
 import com.example.submission3.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -21,20 +22,18 @@ import java.util.*
 class ScheduleAlarmReceiver: BroadcastReceiver()  {
 
     companion object {
-        const val TYPE_ALARM = "Notification Alarm to visit Activity"
         const val EXTRA_MESSAGE = "message"
-        const val EXTRA_TYPE = "type"
-        private const val ALARM_ID = 102
+        const val EXTRA_TITLE = "My Github App"
         private const val DATE_FORMAT = "yyyy-MM-dd"
         private const val TIME_FORMAT = "HH:mm"
         private const val ID_ONETIME = 100
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-        val type = intent?.getStringExtra(ScheduleAlarmReceiver.EXTRA_TYPE)
+        val type = intent?.getStringExtra(ScheduleAlarmReceiver.EXTRA_TITLE)
         val message = intent?.getStringExtra(ScheduleAlarmReceiver.EXTRA_MESSAGE)
 
-        val title = AlarmReceiver.TYPE_ALARM
+        val title = type!!
         val notifyId = AlarmReceiver.ALARM_ID
 
         showToast(context, title, message)
@@ -44,13 +43,9 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
         }
     }
 
-    private fun showToast(context: Context, title: String, message: String?) {
-        Toast.makeText(context, "$title: $message", Toast.LENGTH_LONG).show()
-    }
-
     fun setOneTimeAlarm(
         context: Context,
-        type: String,
+        title: String,
         date: String,
         time: String,
         message: String
@@ -59,8 +54,7 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ScheduleAlarmReceiver::class.java)
         intent.putExtra(EXTRA_MESSAGE, message)
-        intent.putExtra(EXTRA_TYPE, type)
-        Log.e("ONE TIME", "$date $time")
+        intent.putExtra(EXTRA_TITLE, title)
         val dateArray = date.split("-").toTypedArray()
         val timeArray = time.split(":").toTypedArray()
         val calendar = Calendar.getInstance()
@@ -94,18 +88,18 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
         notifyId: Int
     ) {
 
-        val CHANNEL_ID = "Channel_1"
-        val CHANNEL_NAME = "AlarmManager channel"
+        val channelId = "Channel_1"
+        val channelName = "AlarmManager channel"
 
         val notificationManagerCompat =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
-        val intent = Intent(context, ScheduleAlarmActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_access_time_black)
             .setContentTitle(title)
             .setContentText(message)
@@ -116,13 +110,13 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
+                channelId,
+                channelName,
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.enableVibration(true)
             channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            builder.setChannelId(CHANNEL_ID)
+            builder.setChannelId(channelId)
             notificationManagerCompat.createNotificationChannel(channel)
         }
 
@@ -139,6 +133,10 @@ class ScheduleAlarmReceiver: BroadcastReceiver()  {
         alarmManager.cancel(pendingIntent)
 
         Toast.makeText(context, "Repeating alarm dibatalkan", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showToast(context: Context, title: String, message: String?) {
+        Toast.makeText(context, "$title: $message", Toast.LENGTH_LONG).show()
     }
 
 }

@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Submission 3</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Alarm</string>
     <string name="name">Name</string>
     <string name="location">Location</string>
     <string name="no_follower">Follower</string>
@@ -27,7 +28,7 @@
     <string name="no_Internet">Could not retrieve data. Trying again…</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="screen1">Github Logo 1</string>
     <string name="login">login</string>
     <string name="dash">dash</string>
     <string name="location_icon">location_icon</string>
@@ -45,7 +46,8 @@
     <string name="alarm_date">Alarm Date</string>
     <string name="date_icon">Date Icon</string>
     <string name="one_time_alarm">One Time Alarm</string>
-    <string name="click_here_to_set_up_alarm_at_9am">Click here to set up Alarm at 9am</string>
-    <string name="no_data_image">No Data Image</string>
+    <string name="no_data_image">No Data image</string>
     <string name="no_favorite_users_found">No Favorite Users found</string>
+    <string name="splash_home">Welcome to My Github App</string>
+    <string name="splash_image">Splash Image</string>
 </resources>

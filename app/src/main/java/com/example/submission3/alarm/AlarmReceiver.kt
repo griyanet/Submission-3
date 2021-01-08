@@ -19,26 +19,17 @@ import java.util.*
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
-        const val TYPE_ALARM = "Notification Alarm to visit Activity"
         const val EXTRA_MESSAGE = "message"
-        const val EXTRA_TYPE = "type"
+        const val EXTRA_TITLE = "title"
         const val ALARM_ID = 102
-        private const val DATE_FORMAT = "yyyy-MM-dd"
-        private const val TIME_FORMAT = "HH:mm"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val type = intent.getStringExtra(EXTRA_TYPE)
+        val title = intent.getStringExtra(EXTRA_TITLE)
         val message = intent.getStringExtra(EXTRA_MESSAGE)
-
-        val title = TYPE_ALARM
         val notifyId = ALARM_ID
-
-        showToast(context, title, message)
-
-        if (message != null) {
-            showAlarmNotification(context, title, message, notifyId)
-        }
+        showToast(context, title!!, message!!)
+        showAlarmNotification(context, title, message, notifyId)
     }
 
     private fun showToast(context: Context, title: String, message: String?) {
@@ -47,19 +38,21 @@ class AlarmReceiver : BroadcastReceiver() {
 
     fun setOneTimeAlarm(
         context: Context,
-        type: String,
+        title: String,
         message: String
     ) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java).let { intent ->
             intent.putExtra(EXTRA_MESSAGE, message)
-            intent.putExtra(EXTRA_TYPE, type)
+            intent.putExtra(EXTRA_TITLE, title)
             PendingIntent.getBroadcast(context, ALARM_ID, intent, 0)
         }
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, 9)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
         }
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -67,8 +60,14 @@ class AlarmReceiver : BroadcastReceiver() {
             AlarmManager.INTERVAL_DAY,
             intent
         )
+    }
 
-        Toast.makeText(context, "One time alarm set up", Toast.LENGTH_SHORT).show()
+    fun cancelAlarm(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 105, intent, 0)
+        pendingIntent.cancel()
+        alarmManager.cancel(pendingIntent)
     }
 
     private fun showAlarmNotification(
@@ -78,8 +77,8 @@ class AlarmReceiver : BroadcastReceiver() {
         notifyId: Int
     ) {
 
-        val CHANNEL_ID = "Channel_1"
-        val CHANNEL_NAME = "AlarmManager channel"
+        val channelId = "Channel_1"
+        val channelName = "AlarmManager channel"
 
         val notificationManagerCompat =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -89,7 +88,7 @@ class AlarmReceiver : BroadcastReceiver() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_access_time_black)
             .setContentTitle(title)
             .setContentText(message)
@@ -100,13 +99,13 @@ class AlarmReceiver : BroadcastReceiver() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
+                channelId,
+                channelName,
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.enableVibration(true)
             channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            builder.setChannelId(CHANNEL_ID)
+            builder.setChannelId(channelId)
             notificationManagerCompat.createNotificationChannel(channel)
         }
 

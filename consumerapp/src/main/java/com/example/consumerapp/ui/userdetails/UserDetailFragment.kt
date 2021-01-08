@@ -8,6 +8,7 @@ import android.view.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -23,10 +24,7 @@ import com.example.consumerapp.viewmodel.MainViewModel
 import com.example.consumerapp.viewmodel.MainViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class UserDetailFragment : Fragment() {
 
@@ -205,13 +203,13 @@ class UserDetailFragment : Fragment() {
             ).apply {
                 setAction("Undo") {
                     saveToFavorites()
+                    findNavController().navigate(R.id.userDetailFragment2, arguments)
                 }
                 show()
             }
-            if (res > 0) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(3000)
                 findNavController().navigate(R.id.action_userDetailFragment2_to_favoritesFragment)
-            } else {
-                findNavController().navigate(R.id.homeFragment)
             }
         }
         builder.setNegativeButton("No") { _, _ -> }

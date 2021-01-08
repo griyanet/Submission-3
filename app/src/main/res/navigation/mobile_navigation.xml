@@ -3,29 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.submission3.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.submission3.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
-
-    <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.example.submission3.ui.favorites.FavoritesFragment"
         android:label="Favorite Users"
-        tools:layout="@layout/favorites_fragment" >
+        tools:layout="@layout/favorites_fragment">
         <argument
             android:name="Item"
             app:argType="com.example.submission3.model.Item" />
@@ -38,22 +32,46 @@
         android:id="@+id/userDetailFragment"
         android:name="com.example.submission3.ui.userdetails.UserDetailFragment"
         android:label="User Details"
-        tools:layout="@layout/fragment_user_detail" >
+        tools:layout="@layout/fragment_user_detail">
         <argument
             android:name="Item"
             app:argType="com.example.submission3.model.Item" />
         <action
             android:id="@+id/action_userDetailFragment_to_navigation_favorites"
             app:destination="@id/navigation_favorites" />
-
     </fragment>
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.submission3.ui.splash.SplashFragment"
+        android:label="Welcome"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_splashPagerFragment"
+            app:destination="@id/splashPagerFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/splashPagerFragment"
+        android:name="com.example.submission3.ui.splash.SplashPagerFragment"
+        android:label="Introduction"
+        tools:layout="@layout/fragment_splash_pager">
+        <action
+            android:id="@+id/action_splashPagerFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/splashPagerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
     <fragment
         android:id="@+id/navigation_alarm"
-        android:name="com.example.submission3.alarm.AlarmActivity"
-        android:label="Setup Alarm"
-        tools:layout="@layout/activity_alarm" />
-    <activity
-        android:id="@+id/alarmActivity"
-        android:name="com.example.submission3.alarm.AlarmActivity"
-        android:label="AlarmActivity" />
+        android:name="com.example.submission3.ui.alarm.SetupAlarm"
+        android:label="Setup Daily Alarm"
+        tools:layout="@layout/fragment_setup_alarm" />
+
 </navigation>

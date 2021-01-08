@@ -1,6 +1,7 @@
 package com.example.submission3.ui.userdetails
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -23,10 +25,7 @@ import com.example.submission3.viewmodel.MainViewModel
 import com.example.submission3.viewmodel.MainViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class UserDetailFragment : Fragment() {
 
@@ -120,21 +119,32 @@ class UserDetailFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.delete_menu, menu)
+        inflater.inflate(R.menu.share_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete) {
-            removeFavorite()
+        if (item.itemId == R.id.menu_share) {
+            shareFavorite()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
+    private fun shareFavorite() {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_SUBJECT, "My Favorite User")
+            val text = "${args.Item.login}" +
+                    "\n" +
+                    "${args.Item.html_url}" +
+                    "\n" +
+                    "${args.Item.avatar_url}"
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/html"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "My Favorite User")
+        startActivity(shareIntent)
     }
+
     private fun initFavorites() {
         GlobalScope.launch(Dispatchers.Main) {
             val deferredFav = async(Dispatchers.IO) {
@@ -183,7 +193,13 @@ class UserDetailFragment : Fragment() {
 
     private fun findFavId(itemId: Int): Int {
         val uriItemId = Uri.parse("$CONTEN_URI/ITEM/$itemId")
-        val cursor = requireActivity().applicationContext.contentResolver.query(uriItemId, null, null, null, null)
+        val cursor = requireActivity().applicationContext.contentResolver.query(
+            uriItemId,
+            null,
+            null,
+            null,
+            null
+        )
         val favItemList = MappingHelper.mapCursorToArrayList(cursor)
         return if (favItemList.size > 0) {
             favItemList.first().id
@@ -197,7 +213,11 @@ class UserDetailFragment : Fragment() {
         builder.setPositiveButton("Yes") { _, _ ->
             val currentFav = findFavId(args.Item.id)
             uriWithID = Uri.parse("$CONTEN_URI/$currentFav")
-            val res = requireActivity().applicationContext.contentResolver.delete(uriWithID, currentFav.toString(), null)
+            requireActivity().applicationContext.contentResolver.delete(
+                uriWithID,
+                currentFav.toString(),
+                null
+            )
             Snackbar.make(
                 binding.userDetailFragment,
                 "Successfully deleted article",
@@ -205,13 +225,13 @@ class UserDetailFragment : Fragment() {
             ).apply {
                 setAction("Undo") {
                     saveToFavorites()
+                    findNavController().navigate(R.id.userDetailFragment, arguments)
                 }
                 show()
             }
-            if (res > 0) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(3000)
                 findNavController().navigate(R.id.action_userDetailFragment_to_navigation_favorites)
-            } else {
-                findNavController().navigate(R.id.navigation_home)
             }
         }
         builder.setNegativeButton("No") { _, _ -> }

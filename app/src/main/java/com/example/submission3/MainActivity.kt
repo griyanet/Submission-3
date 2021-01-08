@@ -1,10 +1,7 @@
 package com.example.submission3
 
-import android.database.ContentObserver
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -24,23 +21,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         navController = findNavController(R.id.nav_host_fragment)
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_favorites,
-                R.id.navigation_notifications,
                 R.id.navigation_alarm
             )
         )
 
-        /*val handlerThread =HandlerThread("DataObserver")
-        handlerThread.start()
-        val handler = Handler(handlerThread.looper)
-        val myObserver = object: ContentObserver(handler)*/
-
-
         binding.navView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.splashPagerFragment || destination.id == R.id.splashFragment) {
+                binding.navView.visibility = View.GONE
+                supportActionBar?.hide()
+            } else {
+                binding.navView.visibility = View.VISIBLE
+                supportActionBar?.show()
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

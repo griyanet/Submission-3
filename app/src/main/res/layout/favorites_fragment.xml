@@ -61,5 +61,12 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/row_itemfavorites" />
 
+        <include
+            android:id="@+id/favoriteBlank"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/nodata"
+            android:visibility="gone" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -67,6 +67,8 @@ class FavoritesFragment : Fragment() {
             } else {
                 adapter.listFav = ArrayList()
                 showSnackBar("There is no list of Favorite Users yet!")
+                binding.progressBarFav.visibility = View.GONE
+                binding.noFavoriteUser.root.visibility = View.VISIBLE
             }
         }
         binding.progressBarFav.visibility = View.GONE
@@ -93,7 +95,7 @@ class FavoritesFragment : Fragment() {
                 "Successfully remove all Favorite Users!",
                 Toast.LENGTH_SHORT
             ).show()
-            findNavController().navigate(R.id.homeFragment)
+            findNavController().navigate(R.id.favoritesFragment)
         }
         builder.setNegativeButton("No") { _, _ -> }
         builder.setTitle("Delete All Favorites")

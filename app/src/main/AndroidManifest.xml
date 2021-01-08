@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <permission android:name="com.example.submission3.READ_DATABASE" android:protectionLevel="normal"/>
-    <permission android:name="com.example.submission3.WRITE_DATABASE" android:protectionLevel="normal" />
+    <permission android:name="com.example.submission3.READ_DATABASE" />
+    <permission android:name="com.example.submission3.WRITE_DATABASE" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +24,6 @@
         <provider
             android:authorities="com.example.submission3"
             android:name=".provider.FavoriteContentProvider"
-            android:enabled="true"
             android:exported="true"
             android:readPermission="com.example.submission3.READ_DATABASE"
             android:writePermission="com.example.submission3.WRITE_DATABASE"/>
