@@ -48,14 +48,16 @@ class FavoriteContentProvider : ContentProvider() {
         return null
     }
 
+
     override fun insert(uri: Uri, values: ContentValues?): Uri {
         val added: Long? = when (FAVORITES) {
             sUriMatcher.match(uri) -> values?.let { favHelper.insert(it) }
             else -> 0
         }
-        requireContext().contentResolver.notifyChange(CONTEN_URI, null)
+        context!!.contentResolver.notifyChange(CONTEN_URI, null)
         return Uri.parse("$CONTEN_URI/$added")
     }
+
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
         val deleted: Int = when (sUriMatcher.match(uri)) {
@@ -63,9 +65,10 @@ class FavoriteContentProvider : ContentProvider() {
             FAVORITES -> favHelper.deleteAll()
             else -> 0
         }
-        requireContext().contentResolver.notifyChange(CONTEN_URI, null)
+        context!!.contentResolver.notifyChange(CONTEN_URI, null)
         return deleted
     }
+
 
     override fun update(
         uri: Uri,
@@ -81,7 +84,7 @@ class FavoriteContentProvider : ContentProvider() {
             }
             else -> 0
         }
-        requireContext().contentResolver.notifyChange(CONTEN_URI, null)
+        context!!.contentResolver.notifyChange(CONTEN_URI, null)
         return updated!!
     }
 }
