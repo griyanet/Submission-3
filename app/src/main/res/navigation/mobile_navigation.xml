@@ -11,15 +11,9 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_userDetail"
-            app:destination="@id/userDetail" />
+            android:id="@+id/action_navigation_home_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.submission3.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -27,13 +21,39 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
-    <activity
-        android:id="@+id/userDetail"
-        android:name="com.example.submission3.ui.userdetails.UserDetail"
-        android:label="activity_user_detail"
-        tools:layout="@layout/activity_user_detail" >
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.example.submission3.ui.favorites.FavoritesFragment"
+        android:label="Favorite Users"
+        tools:layout="@layout/favorites_fragment" >
         <argument
-            android:name="username"
+            android:name="Item"
             app:argType="com.example.submission3.model.Item" />
-    </activity>
+        <action
+            android:id="@+id/action_navigation_favorites_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.example.submission3.ui.userdetails.UserDetailFragment"
+        android:label="User Details"
+        tools:layout="@layout/fragment_user_detail" >
+        <argument
+            android:name="Item"
+            app:argType="com.example.submission3.model.Item" />
+        <action
+            android:id="@+id/action_userDetailFragment_to_navigation_favorites"
+            app:destination="@id/navigation_favorites" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_alarm"
+        android:name="com.example.submission3.alarm.AlarmActivity"
+        android:label="Setup Alarm"
+        tools:layout="@layout/activity_alarm" />
+    <activity
+        android:id="@+id/alarmActivity"
+        android:name="com.example.submission3.alarm.AlarmActivity"
+        android:label="AlarmActivity" />
 </navigation>

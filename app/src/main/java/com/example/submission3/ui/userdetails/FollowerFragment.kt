@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.submission3.MainViewModel
-import com.example.submission3.MainViewModelFactory
-import com.example.submission3.Repository
+import com.example.submission3.viewmodel.MainViewModel
+import com.example.submission3.viewmodel.MainViewModelFactory
+import com.example.submission3.repository.Repository
 import com.example.submission3.adapter.FollowerAdapter
 import com.example.submission3.databinding.FragmentFollowerBinding
 
@@ -37,6 +37,8 @@ class FollowerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFollowerBinding.inflate(inflater, container, false)
+        val username = arguments?.getString(ARG_USERNAME)
+        username?.let { Log.d("ARG_USERNAME", it) }
         return binding.root
     }
 

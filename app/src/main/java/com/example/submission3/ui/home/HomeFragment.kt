@@ -2,33 +2,28 @@ package com.example.submission3.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.submission3.MainViewModel
-import com.example.submission3.MainViewModelFactory
 import com.example.submission3.R
-import com.example.submission3.Repository
 import com.example.submission3.adapter.UserQueryAdapter
+import com.example.submission3.alarm.AlarmActivity
 import com.example.submission3.databinding.FragmentHomeBinding
 import com.example.submission3.model.Item
-import com.example.submission3.ui.userdetails.UserDetail
+import com.example.submission3.repository.Repository
+import com.example.submission3.viewmodel.MainViewModel
+import com.example.submission3.viewmodel.MainViewModelFactory
 
 class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
-
-    companion object {
-        const val USERNAME = "username"
-    }
 
     private lateinit var viewModel: MainViewModel
     private var listUserQuery: MutableList<Item> = mutableListOf()
     private lateinit var homeViewModel: HomeViewModel
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var userAdapter: UserQueryAdapter
 
     override fun onCreateView(
@@ -45,11 +40,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        userAdapter = UserQueryAdapter(listUserQuery) {
-            val intent = Intent(activity, UserDetail::class.java)
-            intent.putExtra(USERNAME, it)
-            startActivity(intent)
-        }
+        userAdapter = UserQueryAdapter(listUserQuery)
 
         setHasOptionsMenu(true)
         setupRecyclerView()
@@ -60,11 +51,25 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
 
-        val search = menu.findItem(R.id.search)
+        val search = menu.findItem(R.id.searchMenu)
         val searchView = search.actionView as SearchView
         searchView.isSubmitButtonEnabled = true
         searchView.setOnQueryTextListener(this)
-        searchView.queryHint.let { "Masukkan kata" }
+        searchView.queryHint = resources.getString(R.string.search_hint)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.settingMenu -> {
+                val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                startActivity(mIntent)
+            }
+            R.id.navigation_alarm -> {
+                val intent = Intent(activity, AlarmActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

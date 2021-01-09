@@ -2,18 +2,19 @@ package com.example.submission3.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.submission3.databinding.RowItemuserBinding
 import com.example.submission3.model.Item
+import com.example.submission3.ui.home.HomeFragmentDirections
 
-class UserQueryAdapter(
-    private var list: List<Item>,
-    private val listener: (Item) -> Unit
-) : RecyclerView.Adapter<UserQueryAdapter.UserViewHolder>() {
+class UserQueryAdapter(private var list: List<Item>) :
+    RecyclerView.Adapter<UserQueryAdapter.UserViewHolder>() {
 
-    class UserViewHolder(private val binding: RowItemuserBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun userBind(item: Item, listener: (Item) -> Unit) {
+    class UserViewHolder(private val binding: RowItemuserBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun userBind(item: Item) {
             binding.tvLogin.text = item.login
             binding.tvUserUrl.text = item.url
             binding.tvFollowerUrl.text = item.followers_url
@@ -22,7 +23,9 @@ class UserQueryAdapter(
                 .load(item.avatar_url)
                 .into(binding.ivAvatar)
             binding.cvCardView.setOnClickListener {
-                listener(item)
+                val toUserDetailFragment =
+                    HomeFragmentDirections.actionNavigationHomeToUserDetailFragment(item)
+                itemView.findNavController().navigate(toUserDetailFragment)
             }
         }
 
@@ -40,7 +43,7 @@ class UserQueryAdapter(
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.userBind(list[position], listener)
+        holder.userBind(list[position])
     }
 
     override fun getItemCount(): Int = list.size
